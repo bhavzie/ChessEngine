@@ -1,0 +1,68 @@
+Chess Enginge Programming :
+
+    Steps Required :
+    
+    
+        1)  Represent the board 
+                This is where you use BitBoards ( A 64 Bit number to represent the Board because it has 64 positions 
+                that is 8x8 board : So we use a Unsigned Long long ( ULL ) to represent the board which can be seen 
+                working in this example : 000000000001...0 which would indicate we have a 1 or a piece at a given X 
+                position and others being 0 implying no piece on that position
+                
+                BitBoards :
+                We can either chose a 64 bit array of integers to represent the board and then put a separate integer for each of the pieces
+                on the board or have one single 64 byte integer to represent one type of piece on the board.
+                Now say we choose a 64 byte array then the problem is we have to always run a for loop through the 64 byte array to check if the
+                king is present on some X square or not.This can cause a real chaos when trying to generate moves or see which piece is being attacked.
+                So we will go for a 64 byte integer which is say ULL and have it represent the board wherein :
+                A 0 represents that type of piece is not present on the board
+                A 1 represents that the type of piece is present on the board
+                Now we will need 12 such integers since theres 13 types of pieces on the board say
+                WK WQ WP WR WN WB 
+                BK BQ BP BR BN BB
+
+        ---------------------------------------------------------------------------------------------------------------------------------------------        
+                
+        2)  Generate a move
+                Check for each possibility if its legal or not and so we usually go for a 120 board rather than 64 
+                since some pieces might jump out of 64 board
+                
+                Transposing Tables :
+                There are often many ways to reach the same position.
+                A transposition table is a repository of past search results, usually implemented as a hash dictionary or similar structure to achieve maximum speed. 
+                When a position has been searched, the results (i.e., evaluation, depth of the search performed from this position, best move, etc.) are stored in the table.
+                Then, when new positions have to be searched, we query the table first: if suitable results already exist for a specific position, we use them and bypass the 
+                search entirely.
+                
+                HashTable:
+                Generate 12x64 random numbers ( random number for each type of piece on each position ) thus we got a key and a value associated with it
+                Start with a Null key and keep XORing with each random number to get key for each piece
+                The advantage of this XOR is if we wish to delete the piece from the position we can XOR it again and thus erase the key
+                XOR gives a consistent value despite the order in which XORing is done
+                
+                History Tables:
+                Keep a list of moves that generated a successful output in the past and thus give them more priority for future checks
+                
+                FEN Representation :
+                We represent every sq on the board using a FEN representation ( google FEN ) .
+                GUI sends you a position FEN : 'X'
+                so our program converts this X into correct square 
+                Lowercase alphabets represent black pieces , Upper for white
+                numbers represent empty number of sq on the given rank
+                Example : rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+                first 8 pieces on 8th rank / all pieces on 7th rank/number of empty / same for black / side to move / castle perm / enPas/ 50move rule
+                counter / full move counter which is fullmove counter
+                 
+        ---------------------------------------------------------------------------------------------------------------------------------------------
+    
+        3)  Search for the best move
+                Checking what is good and bad and how deep the search must be
+        
+        
+        ---------------------------------------------------------------------------------------------------------------------------------------------
+        
+        4)  Evaluation
+                Evaluating  at each step whether the engine is losing or winning so as to make moves accordingly
+
+            
+-------X----------X------------X----------------X---------------X---------X------------X-----------X--------------X------------X--------------X-------X
