@@ -1,5 +1,5 @@
 # ChessEngine
-A Chess Engine in C 
+A Chess Engine in C .
 Most of the idea is taken from https://chessprogramming.wikispaces.com/ 
 
 
