@@ -1,12 +1,12 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#include<stdlib.h>
 
 //Error handler
-    #include<stdlib.h>
     #define DEBUG
     #ifndef DEBUG
-    #define ASSERT(n)
+    #define ASSERT(n)		// if N is false 
     #else
     #define ASSERT(n) \
     if(!(n)) { \
@@ -50,7 +50,7 @@
     enum{WKCA=1,WQCA=2,BKCA=4,BQCA=8};   // 0 0 0 0  ( each bit represents whether castle is possible ) If possible 1 else we change to 0
 
     typedef struct {
-        int move;           // Number of Moves made
+        int move;           // the move last played
         int castlePerm;
         int enPas;
         int fiftyMove;      
@@ -86,7 +86,7 @@
               so say pList[Wn][0]=E5 that is first white knight at e5 and so on
             */
             
-            S_UNDO history[MAXGAMEMOVES]; // Hold information of the board before a move is moved
+            S_UNDO history[MAXGAMEMOVES]; // Hold information of the board before a move is moved , we use 2048 since we wanto to hold history for all the moves rather than only the last move
 
     } S_BOARD;
 
@@ -109,7 +109,7 @@
     extern U64 SetMask[64];
     extern U64 ClearMask[64];
     extern U64 PieceKeys[13][120];
-    extern U64 SideKey;
+    extern U64 SideKey;		// Not just position but actually creating a unique key based on position and side and given castleperm 
     extern U64 CastleKeys[16];
     extern char PceChar[];
     extern char SideChar[];
