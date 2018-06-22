@@ -96,6 +96,7 @@ int CheckBoard(const S_BOARD *pos)
 	
 
 void UpdateListsMaterial(S_BOARD *pos)		// Update the sq on board 
+						// We are checking the pieces array from our S_BOARD and trying to update params in S_BOARD according to the piece moved 
 {
 	int piece,sq,index,colour;
 	for(index=0;index<BRD_SQ_NUM;++index)

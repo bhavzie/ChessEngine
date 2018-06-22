@@ -1,12 +1,12 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#include<stdlib.h>
 
 //Error handler
-    #include<stdlib.h>
     #define DEBUG
     #ifndef DEBUG
-    #define ASSERT(n)
+    #define ASSERT(n)		// if N is false 
     #else
     #define ASSERT(n) \
     if(!(n)) { \
@@ -50,7 +50,7 @@
     enum{WKCA=1,WQCA=2,BKCA=4,BQCA=8};   // 0 0 0 0  ( each bit represents whether castle is possible ) If possible 1 else we change to 0
 
     typedef struct {
-        int move;           // Number of Moves made
+        int move;           // the move last played
         int castlePerm;
         int enPas;
         int fiftyMove;      
@@ -86,7 +86,7 @@
               so say pList[Wn][0]=E5 that is first white knight at e5 and so on
             */
             
-            S_UNDO history[MAXGAMEMOVES]; // Hold information of the board before a move is moved
+            S_UNDO history[MAXGAMEMOVES]; // Hold information of the board before a move is moved , we use 2048 since we wanto to hold history for all the moves rather than only the last move
 
     } S_BOARD;
 
@@ -94,37 +94,51 @@
     
 
 /*Macros*/
-    #define FR2SQ(f,r) ((21+(f))+((r)*10))                    // For a given file and rank it returns equivalent sq in 120 based board
-    #define SQ64(sq120) Sq120ToSq64[sq120]                    // Just a shorter name 
-    #define SQ120(sq64) (Sq64ToSq120[(sq64)])
-    #define POP(b) PopBit(b)
-    #define CNT(b) CountBits(b)
-    #define CLRBIT(bb,sq) ((bb)&=ClearMask[(sq)])
-    #define SETBIT(bb,sq) ((bb)|=SetMask[(sq)])
+	#define FR2SQ(f,r) ((21+(f))+((r)*10))                    // For a given file and rank it returns equivalent sq in 120 based board
+	#define SQ64(sq120) Sq120ToSq64[sq120]                    // Just a shorter name 
+	#define SQ120(sq64) (Sq64ToSq120[(sq64)])
+	#define POP(b) PopBit(b)
+	#define CNT(b) CountBits(b)
+	#define CLRBIT(bb,sq) ((bb)&=ClearMask[(sq)])
+	#define SETBIT(bb,sq) ((bb)|=SetMask[(sq)])
+	#define IsBQ(p) (PieceBishopQueen[(p)])			// Just a shorter name
+	#define IsRQ(p) (PieceRookQueen[(p)])
+	#define IsKn(p) (PieceKnight[(p)])
+	#define IsKi(p) (PieceKing[(p)])
+	
+
     
 
 /*Globals*/
-    extern int Sq120ToSq64[BRD_SQ_NUM];
-    extern int Sq64ToSq120[64];
-    extern U64 SetMask[64];
-    extern U64 ClearMask[64];
-    extern U64 PieceKeys[13][120];
-    extern U64 SideKey;
-    extern U64 CastleKeys[16];
-    extern char PceChar[];
-    extern char SideChar[];
-    extern char RankChar[];
-    extern char FileChar[];
-    extern int PieceBig[13];	// To know whether a piece is big a major , whats its value amd what is its color
-    extern int PieceMaj[13];
-    extern int PieceMin[13];
-    extern int PieceVal[13];
-    extern int PieceCol[13];
-    extern int FilesBrd[BRD_SQ_NUM];
-    extern int RanksBrd[BRD_SQ_NUM];
-
     
-
+	extern int Sq120ToSq64[BRD_SQ_NUM];
+	extern int Sq64ToSq120[64];
+	
+	extern U64 SetMask[64];
+	extern U64 ClearMask[64];
+	
+	extern U64 PieceKeys[13][120];
+	extern U64 SideKey;		// Not just position but actually creating a unique key based on position and side and given castleperm 
+	extern U64 CastleKeys[16];
+	
+	extern char PceChar[];
+	extern char SideChar[];
+	extern char RankChar[];
+	extern char FileChar[];
+	extern int PieceBig[13];	// To know whether a piece is big a major , whats its value amd what is its color
+	extern int PieceMaj[13];
+	extern int PieceMin[13];
+	extern int PieceVal[13];
+	extern int PieceCol[13];
+	
+	extern int FilesBrd[BRD_SQ_NUM];
+	extern int RanksBrd[BRD_SQ_NUM];
+	
+	extern int PieceKnight[13];	// Just asking whether given piece is a knight or not - quite similar to PieceMin and PieceMaj
+	extern int PieceKing[13];
+	extern int PieceRookQueen[13];
+	extern int PieceBishopQueen[13];
+	
 /*Functions*/
 
 
@@ -145,7 +159,9 @@
 	extern void PrintBoard(S_BOARD *pos);
 	extern void UpdateListsMaterial(S_BOARD *pos);
 	extern int CheckBoard(const S_BOARD *pos);
-
+	
+	//attack.c	
+	extern int SqAttacked(const int sq,const int side,const S_BOARD *pos);
 
 
 
