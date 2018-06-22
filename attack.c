@@ -2,7 +2,6 @@
 
 
 // Directions in which the piece can move
-
 const int KnDir[8] = {-8,-19,-21,-12,8,19,21,12}; 
 const int RkDir[8] = {-1,-10,1,10};	// Rooks move from -1 to 1 and -10 to 10
 const int BiDir[8] = {-9,-11,11,9};
