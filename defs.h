@@ -27,6 +27,7 @@
     #define NAME "Vice 1.0"
     #define BRD_SQ_NUM 120                  // The square board is made 120 out of which 64 ( 8x8 ) are legal rest are filler
     #define MAXGAMEMOVES 2048               // Max number of moves in a game
+    #define MAXPOSITIONMOVES 256		    // Max moves for a given position
     
    #define START_FEN  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     
@@ -50,9 +51,21 @@
     enum{WKCA=1,WQCA=2,BKCA=4,BQCA=8};   // 0 0 0 0  ( each bit represents whether castle is possible ) If possible 1 else we change to 0
 
    
-   
+
+typedef struct {
+	int move;
+	int score;
+	   
+} S_MOVE;
+
+typedef struct {
     
-    typedef struct {
+	S_MOVE moves[MAXPOSITIONMOVES];
+	int count;	// Count of number of moves in the list
+	    
+} S_MOVELIST;
+ 
+typedef struct {
         int move;           // the move last played is stored as a 32 bit integer 
         int castlePerm;
         int enPas;
@@ -186,5 +199,12 @@
 	extern char *PrSq(const int sq);
 	extern char *PrMove(const int move);
 
-
+	// validate.c
+	extern int SqOnBoard(const int sq);
+	extern int SideValid(const int side);
+	extern int FileRankValid(const int fr);
+	extern int PieceValidEmpty(const int pce);
+	extern int PieceValid(const int pce);
+	
+	
 #endif
