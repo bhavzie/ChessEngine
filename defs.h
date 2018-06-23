@@ -49,14 +49,18 @@
     enum{FALSE,TRUE};
     enum{WKCA=1,WQCA=2,BKCA=4,BQCA=8};   // 0 0 0 0  ( each bit represents whether castle is possible ) If possible 1 else we change to 0
 
+   
+   
+    
     typedef struct {
-        int move;           // the move last played
+        int move;           // the move last played is stored as a 32 bit integer 
         int castlePerm;
         int enPas;
         int fiftyMove;      
         U64 posKey;            // using a hashkey which is a unique key for each sq on the board 
         
-    } S_UNDO;           // Helps undo board by storing history of board before move is made
+	
+} S_UNDO;           // Helps undo board by storing history of board before move is made
 
     typedef struct {
         
@@ -90,9 +94,17 @@
 
     } S_BOARD;
 
-//
+/* MOVES 
+ * Considering we have a 32 bit integer to store a move,we will assign first 7 bits for the FROM position , since the board can go from 21 to 98 and all these can be obtained by using 7 bits
+ * 0000 0000 0000 0000 0000 0111 1111	-> FROM 0x7F
+ * 0000 0000 0000 0011 1111 1000 0000	-> TO >> 7 0x7F
+ * 0000 0000 0011 1100 0000 0000 0000	-> CAPTURED piece type >> 14 0xF
+ * 0000 0000 0100 0000 0000 0000 0000	-> EnPassant 0x40000 	; No shifting here since we just & these later
+ * 0000 0000 1000 0000 0000 0000 0000	-> Pawn Start 0x80000
+ * 0000 1111 0000 0000 0000 0000 0000	-> Promoted piece type since they can be of 12 types we assign 4 bits	>> 20 , 0xF
+ * 0001 0000 0000 0000 0000 0000 0000	-> Castle 0x1000000
+ */
     
-
 /*Macros*/
 	#define FR2SQ(f,r) ((21+(f))+((r)*10))                    // For a given file and rank it returns equivalent sq in 120 based board
 	#define SQ64(sq120) Sq120ToSq64[sq120]                    // Just a shorter name 
@@ -105,9 +117,16 @@
 	#define IsRQ(p) (PieceRookQueen[(p)])
 	#define IsKn(p) (PieceKnight[(p)])
 	#define IsKi(p) (PieceKing[(p)])
-	
+	#define FROMSQ(m) ((m) & 0x7F)
+	#define TOSQ(m) (((m)>>7) & 0x7F)
+	#define CAPTURED(m) (((m)>>14) & 0xF)
+	#define PROMOTED(m) (((m)>>20) & 0xF)
+	#define MFLAGEP 0x40000
+	#define MFLAGPS 0x80000
+	#define MFLAGCA 0x1000000
+	#define MFLAGCAP 0x7C000
+	#define MFLAGPROM 0xF00000
 
-    
 
 /*Globals*/
     
