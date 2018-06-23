@@ -1,7 +1,8 @@
 #include"defs.h"
-
+#include<stdio.h>
 
 // Directions in which the piece can move
+
 const int KnDir[8] = {-8,-19,-21,-12,8,19,21,12}; 
 const int RkDir[8] = {-1,-10,1,10};	// Rooks move from -1 to 1 and -10 to 10
 const int BiDir[8] = {-9,-11,11,9};
@@ -11,6 +12,10 @@ const int KiDir[8] = {-1,-10,1,10,-9,-11,11,9};
 int SqAttacked(const int sq,const int side,const S_BOARD *pos)
 {
 	int pce,index,t_sq,dir;
+	
+	ASSERT(SqOnBoard(sq));
+	ASSERT(SideValid(side));
+	ASSERT(CheckBoard(pos));
 	
 	// pawn attacks sq
 	if(side==WHITE)
