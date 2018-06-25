@@ -135,10 +135,10 @@ typedef struct {
 	#define CAPTURED(m) (((m)>>14) & 0xF)
 	#define PROMOTED(m) (((m)>>20) & 0xF)
 	#define MFLAGEP 0x40000
-	#define MFLAGPS 0x80000
-	#define MFLAGCA 0x1000000
-	#define MFLAGCAP 0x7C000
-	#define MFLAGPROM 0xF00000
+	#define MFLAGPS 0x80000		// PawnStart
+	#define MFLAGCA 0x1000000	// Castle
+	#define MFLAGCAP 0x7C000	// Captured 
+	#define MFLAGPROM 0xF00000	// Promoted
 
 
 /*Globals*/
@@ -174,7 +174,7 @@ typedef struct {
 /*Functions*/
 
 
-	//init.c
+	// init.c
         extern void AllInit();
 
 	// bitboards.c
@@ -185,19 +185,20 @@ typedef struct {
 	// hashkeys.c
 	extern U64 GeneratePosKey(const S_BOARD *pos);
     
-	//board.c
+	// board.c
         extern void ResetBoard(S_BOARD *pos);
 	extern int ParseFen(char *fen,S_BOARD *pos);
 	extern void PrintBoard(S_BOARD *pos);
 	extern void UpdateListsMaterial(S_BOARD *pos);
 	extern int CheckBoard(const S_BOARD *pos);
 	
-	//attack.c	
+	// attack.c	
 	extern int SqAttacked(const int sq,const int side,const S_BOARD *pos);
 
 	// io.c
 	extern char *PrSq(const int sq);
 	extern char *PrMove(const int move);
+	extern void PrintMoveList(const S_MOVELIST *list);
 
 	// validate.c
 	extern int SqOnBoard(const int sq);
@@ -206,5 +207,7 @@ typedef struct {
 	extern int PieceValidEmpty(const int pce);
 	extern int PieceValid(const int pce);
 	
+	// movegen.c
+	extern void GenerateAllMoves[const S_BOARD *pos,S_MOVELIST *list);
 	
 #endif
