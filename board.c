@@ -259,12 +259,16 @@ void ResetBoard(S_BOARD *pos)
 		pos->pieces[SQ120(index)] = EMPTY;
 	}
 	
-	for(index = 0; index < 3; ++index)
+	for(index = 0; index < 2; ++index)
 	{
 		pos->bigPce[index] = 0;
 		pos->majPce[index] = 0;
 		pos->minPce[index] = 0;
 		pos->material[index] = 0;
+	}
+	
+	for(index=0;index<3;++index)
+	{
 		pos->pawns[index] = 0ULL;
 	}
 	
