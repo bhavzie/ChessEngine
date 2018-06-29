@@ -87,8 +87,8 @@ typedef struct {
             int side;                   // Who is moving
             int enPas;                  //En Passant square
             int fiftyMove;              //Check if 50 moves then draw
-            int ply;                    //Half Moves during search
-            int hisPly;                 //Check Repitions by storing ply , Hisply stores total number of half moves made till now
+            int ply;                    //Half Moves during searching a move ( so it's always 0 at the start of a search and you go on until you find the desired move and ++ply )
+            int hisPly;                 //Hisply stores total number of half moves made till now 
             U64 posKey;                 //Check position which is a unique key for each position
             int pceNum[13];             //Number of pieces on the board ( array of 13 since 13 types of pieces ( including empty )
             int bigPce[2];              //Number of big pieces( which are not pawns) for each color
@@ -171,6 +171,7 @@ typedef struct {
 	extern int PieceRookQueen[13];
 	extern int PieceBishopQueen[13];
 	extern int PieceSlides[13];
+	extern int PiecePawn[13];
 	
 /*Functions*/
 
