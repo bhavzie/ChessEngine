@@ -32,6 +32,7 @@ const int NumDir[13] = {
 
 static void AddQuietMove(const S_BOARD *pos,int move,S_MOVELIST *list)
 {
+	
 	list->moves[list->count].move=move;
 	list->moves[list->count].score=0;
 	list->count++;
@@ -39,6 +40,7 @@ static void AddQuietMove(const S_BOARD *pos,int move,S_MOVELIST *list)
 
 static void AddCaptureMove(const S_BOARD *pos,int move,S_MOVELIST *list)
 {
+	
 	list->moves[list->count].move=move;
 	list->moves[list->count].score=0;
 	list->count++;
@@ -46,6 +48,7 @@ static void AddCaptureMove(const S_BOARD *pos,int move,S_MOVELIST *list)
 
 static void AddEnPassantMove(const S_BOARD *pos,int move,S_MOVELIST *list)
 {
+	
 	list->moves[list->count].move=move;
 	list->moves[list->count].score=0;
 	list->count++;
@@ -166,11 +169,11 @@ void GenerateAllMoves(const S_BOARD *pos,S_MOVELIST *list)
 			}
 			if(sq+9==pos->enPas)
 			{
-				AddCaptureMove(pos,MOVE(sq,sq+9,EMPTY,EMPTY,MFLAGEP),list);
+				AddEnPassantMove(pos,MOVE(sq,sq+9,EMPTY,EMPTY,MFLAGEP),list);
 			}
 			if(sq+11==pos->enPas)
 			{
-				AddCaptureMove(pos,MOVE(sq,sq+11,EMPTY,EMPTY,MFLAGEP),list);
+				AddEnPassantMove(pos,MOVE(sq,sq+11,EMPTY,EMPTY,MFLAGEP),list);
 			}
 		}
 		
@@ -197,6 +200,7 @@ void GenerateAllMoves(const S_BOARD *pos,S_MOVELIST *list)
 				}
 			}				
 		}
+
 		
 	}
 	else
@@ -226,11 +230,11 @@ void GenerateAllMoves(const S_BOARD *pos,S_MOVELIST *list)
 		}
 		if(sq-9==pos->enPas)
 		{
-			AddCaptureMove(pos,MOVE(sq,sq-9,EMPTY,EMPTY,MFLAGEP),list);
+			AddEnPassantMove(pos,MOVE(sq,sq-9,EMPTY,EMPTY,MFLAGEP),list);
 		}
 		if(sq-11==pos->enPas)
 		{
-			AddCaptureMove(pos,MOVE(sq,sq-11,EMPTY,EMPTY,MFLAGEP),list);
+			AddEnPassantMove(pos,MOVE(sq,sq-11,EMPTY,EMPTY,MFLAGEP),list);
 		}
 		
 		// castling king side
