@@ -139,6 +139,7 @@ typedef struct {
 	#define MFLAGCA 0x1000000	// Castle
 	#define MFLAGCAP 0x7C000	// Captured 
 	#define MFLAGPROM 0xF00000	// Promoted
+	#define NOMOVE 0
 
 
 /*Globals*/
@@ -201,6 +202,7 @@ typedef struct {
 	extern char *PrSq(const int sq);
 	extern char *PrMove(const int move);
 	extern void PrintMoveList(const S_MOVELIST *list);
+	extern int ParseMove(char *ptrChar,S_BOARD *pos);
 
 	// validate.c
 	extern int SqOnBoard(const int sq);
@@ -219,6 +221,7 @@ typedef struct {
 	// perft.c
 	extern void PerftTest(int depth, S_BOARD *pos);
 	
-
+	// search.c	
+	extern void SearchPosition(S_BOARD *pos);
 	
 #endif

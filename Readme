@@ -1,0 +1,167 @@
+Chess Enginge Programming :
+
+    Steps Required :
+    
+    
+        1)  Represent the board 
+                This is where you use BitBoards ( A 64 Bit number to represent the Board because it has 64 positions 
+                that is 8x8 board : So we use a Unsigned Long long ( ULL ) to represent the board which can be seen 
+                working in this example : 000000000001...0 which would indicate we have a 1 or a piece at a given X 
+                position and others being 0 implying no piece on that position
+                
+                BitBoards :
+                Now say we choose a array then the problem is we have to always run a for loop through the 64 positions to check if the
+                king is present on some X square or not.This can cause a real chaos when trying to generate moves or see which piece is being attacked.
+                So we will go for a 64 bit integer which is say ULL and have it represent the board wherein :
+                A 0 represents that type of piece is not present on the board
+                A 1 represents that the type of piece is present on the board
+                Now we will need 12 such integers since theres 13 types of pieces on the board say
+                EMPTY
+                WK WQ WP WR WN WB 
+                BK BQ BP BR BN BB
+
+        ---------------------------------------------------------------------------------------------------------------------------------------------        
+                
+        2)  Generate a move
+                Check for each possibility if its legal or not and so we usually go for a 120 board rather than 64 
+                since some pieces might jump out of 64 board
+                
+                Transposing Tables :
+                There are often many ways to reach the same position.
+                A transposition table is a repository of past search results, usually implemented as a hash dictionary or similar structure to achieve maximum speed. 
+                When a position has been searched, the results (i.e., evaluation, depth of the search performed from this position, best move, etc.) are stored in the table.
+                Then, when new positions have to be searched, we query the table first: if suitable results already exist for a specific position, we use them and bypass the 
+                search entirely.
+                
+                HashTable:
+                Generate 12x64 random numbers ( random number for each type of piece on each position ) thus we got a key and a value associated with it
+                Start with a Null key and keep XORing with each random number to get key for each piece
+                The advantage of this XOR is if we wish to delete the piece from the position we can XOR it again and thus erase the key
+                XOR gives a consistent value despite the order in which XORing is done
+                
+                History Tables:
+                Keep a list of moves that generated a successful output in the past and thus give them more priority for future checks
+                
+                FEN Representation :
+                We represent every sq on the board using a FEN representation ( google FEN ) .
+                GUI sends you a position FEN : 'X'
+                so our program converts this X into correct square 
+                Lowercase alphabets represent black pieces , Upper for white
+                numbers represent empty number of sq on the given rank
+                Example : rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+                first 8 pieces on 8th rank / all pieces on 7th rank/number of empty / same for black / side to move / castle perm / enPas/ 50move rule
+                counter / full move counter which is fullmove counter
+                
+                Generate-All-Moves(movegen.c) is a function used to generate all possible legal moves and add them to a MOVELIST 
+                Each move is associated with the relative changes in the movelist and assigning a score for each move ( helps with the search )
+                
+                Perft Testing : 
+                Searching in a tree for all possible moves and then comparing it to some predefined values 
+                This is done to check if there are any bugs in our GenerateMove function
+                 
+        ---------------------------------------------------------------------------------------------------------------------------------------------
+    
+        3)  Search for the best move
+                Checking what is good and bad and how deep the search must be :
+		Assume our moves to be represented as a binary tree
+		At each position you can make 2 legal moves,and this can go on till any X depth.
+		So say you make a move X as white,there can be two replies from black for which white can reply with either of the 2 legal moves and so on
+		Engine will walk through each move and till a given depth find the best score
+		White wants the score to be as big as possible,Black wants the score to be as small as possible
+		Evaluate() function : 
+		Since it isn't possible to traverse the tree toan infinite depth,usually there is a function to help us evaluate the position or assign a score to a given position
+		Usually a +ve value is assigned when white is winning and negative value for black
+		
+		int MinMax(int depth)
+		{
+		if (SideToMove() == WHITE)    // White is the "maximizing" player.
+			return Max(depth);
+		else                          // Black is the "minimizing" player.
+			return Min(depth);
+		}		
+
+		int Max(int depth)
+		{
+		int best = -INFINITY;
+		if (depth <= 0)
+		return Evaluate();
+		GenerateLegalMoves();
+		while (MovesLeft())
+		{
+			MakeNextMove();
+			val = Min(depth - 1);
+			UnmakeMove();
+			if (val > best)
+			best = val;
+		}
+		return best;
+		}		
+		
+		int Min(int depth)
+		{
+		int best = INFINITY;  // <-- Note that this is different than in "Max".
+		if (depth <= 0)
+		return Evaluate();
+		GenerateLegalMoves();
+		while (MovesLeft())
+		{
+			MakeNextMove();
+			val = Max(depth - 1);
+			UnmakeMove();
+			if (val < best)  // <-- Note that this is different than in "Max".
+			best = val;
+		}
+		return best;
+		}
+		
+		These functions are dual recursive, meaning that they call each other until the desired search depth is reached.
+		
+		Nega-max is just min-max with an optimization :
+		It returns scores that are positive if the side to move at the current node is ahead, and everything else is also viewed 
+		from the perspective of the side to move.  When the value is returned, it is negated, because it is now being viewed from
+		the perspective of the other side.
+		Min-max is very slow because  you the number of nodes you have to look at grows exponentially based upon the branching factor.
+		So a better option would be to use an Alpha-Beta search
+		
+		Alpha-Beta Search : 
+		if you know that you are guaranteed to get a score of X if you follow one path, you can stop examining any other particular path once
+		it becomes obvious that you will score less than X -- you don't have to figure out exactly how much less than X you will score.
+		The idea is that two scores are passed around in the search.  The first one is alpha
+		Anything less than or equal to alpha is no improvement.
+		The second score is beta.  Beta is the worst-case scenario for the opponent
+		So at all times when searching, you know that you can do no worse than alpha, and that you can do no better than beta. 
+		Anything outside of these bounds you can ignore.
+		
+		If a move results in a score that was less than or equal to alpha, it was just a bad move and it can be forgotten about
+		If a move results in a score that is greater than or equal to beta, this whole node is trash, since the opponent is not going 
+		to let the side to move achieve this position, because there is some choice the opponent can make that will avoid it
+		If a move results in a score that is greater than alpha, but less than beta, this is the move that the side to move is going to plan to play
+		
+		int AlphaBeta(int depth, int alpha, int beta)
+		{
+		if (depth == 0)
+		return Evaluate();
+		GenerateLegalMoves();
+		while (MovesLeft())
+		{
+			MakeNextMove();
+			val = -AlphaBeta(depth - 1, -beta, -alpha);
+			UnmakeMove();
+			if (val >= beta)
+			return beta;
+			if (val > alpha)
+			alpha = val;
+		}
+		return alpha;
+		}
+		
+		The most important thing while using Alpha-Beta is to have good move ordering,otherwise the worst nodes might always be called first and 
+		we might not achieve a lot of redundancy in the nodes traversed
+		Most effective way is to have the best node being visited first,so that worst one can always be skipped
+        ---------------------------------------------------------------------------------------------------------------------------------------------
+        
+        4)  Evaluation
+                Evaluating  at each step whether the engine is losing or winning so as to make moves accordingly
+
+            
+-------X----------X------------X----------------X---------------X---------X------------X-----------X--------------X------------X--------------X-------X
