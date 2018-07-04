@@ -169,11 +169,11 @@ void GenerateAllMoves(const S_BOARD *pos,S_MOVELIST *list)
 			}
 			if(sq+9==pos->enPas)
 			{
-				AddEnPassantMove(pos,MOVE(sq,sq+9,EMPTY,EMPTY,MFLAGEP),list);
+				AddCaptureMove(pos,MOVE(sq,sq+9,EMPTY,EMPTY,MFLAGEP),list);
 			}
 			if(sq+11==pos->enPas)
 			{
-				AddEnPassantMove(pos,MOVE(sq,sq+11,EMPTY,EMPTY,MFLAGEP),list);
+				AddCaptureMove(pos,MOVE(sq,sq+11,EMPTY,EMPTY,MFLAGEP),list);
 			}
 		}
 		
@@ -230,11 +230,11 @@ void GenerateAllMoves(const S_BOARD *pos,S_MOVELIST *list)
 		}
 		if(sq-9==pos->enPas)
 		{
-			AddEnPassantMove(pos,MOVE(sq,sq-9,EMPTY,EMPTY,MFLAGEP),list);
+			AddCaptureMove(pos,MOVE(sq,sq-9,EMPTY,EMPTY,MFLAGEP),list);
 		}
 		if(sq-11==pos->enPas)
 		{
-			AddEnPassantMove(pos,MOVE(sq,sq-11,EMPTY,EMPTY,MFLAGEP),list);
+			AddCaptureMove(pos,MOVE(sq,sq-11,EMPTY,EMPTY,MFLAGEP),list);
 		}
 		
 		// castling king side
