@@ -1,5 +1,11 @@
+#include<stdio.h>
 #include"defs.h"
 #include<stdlib.h>
+
+
+/*
+ * Initialization of most params in defs.h
+ */
 
 #define RAND_64 ((U64)rand() | \
                  (U64)rand()<<15 | \

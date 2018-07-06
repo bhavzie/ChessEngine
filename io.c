@@ -1,6 +1,10 @@
 #include<stdio.h>
 #include"defs.h"
 
+
+/*
+ * Manages the printing of sq/moves & also scanning moves entered by user
+ */
 char *PrSq(const int sq)	// Print sq in the form say b2
 {
 	static char SqStr[3];
@@ -38,7 +42,9 @@ char *PrMove(const int move)	// Print move in algebraic notation just saying b2b
 			pchar='b';
 		}
 		sprintf(MvStr,"%c%c%c%c%c",('a'+ff),('1'+rf),('a'+ft),('1'+rt),pchar);
-	}
+	}/*types of pieces are 13 and max number of a piece can be 10 ( if we promote all pawns to rooks and have 2 rooks at the start )
+		so say pList[Wn][0]=E5 that is first white knight at e5 and so on
+		*/
 	else
 	{
 		sprintf(MvStr,"%c%c%c%c",('a'+ff),('1'+rf),('a'+ft),('1'+rt));
