@@ -1,5 +1,8 @@
-#include "defs.h"
+#include"defs.h"
 
+/*
+ * Just helps verify the input/output
+ */
 
 int SqOnBoard(const int sq)
 {

@@ -1,6 +1,14 @@
-#include "stdio.h"
-#include "defs.h"
+#include<stdio.h>
+#include"defs.h"
 
+
+/*
+ * CheckBoard helps to verify whether the entire board is bug free by just putting in some Asserts
+ * UpdateListsMaterial helps to update the lists and certain params defined in defs.h
+ * ParseFen helps parse an FEN supplied by the GUI / console to help setup the board
+ * ResetBoard helps reset all params and values on the board say when a newgame is to be started
+ * PrintBoard helps display the board on the console
+ */
 int CheckBoard(const S_BOARD *pos) 
 {   
  
@@ -289,6 +297,8 @@ void ResetBoard(S_BOARD *pos)
 	pos->castlePerm = 0;
 	
 	pos->posKey = 0ULL;
+	
+	InitPvTable(pos->PvTable);
 	
 }
 void PrintBoard(const S_BOARD *pos)

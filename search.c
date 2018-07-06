@@ -49,6 +49,8 @@ int IsRepetition(const S_BOARD *pos)
 	
 	for(index=pos->hisPly-pos->fiftyMove;index<pos->hisPly-1;++index)
 	{
+		ASSERT(index>=0&&index<MAXGAMEMOVES);
+		
 		if(pos->posKey==pos->history[index].posKey)
 			return TRUE;
 	}

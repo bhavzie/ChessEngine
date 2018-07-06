@@ -1,6 +1,11 @@
-#include "stdio.h"
-#include "defs.h"
+#include<stdio.h>
+#include"defs.h"
 
+
+
+/*
+ * Generates a Positionkey or hashkey for each position,helps in searches and checking repitions
+ */
 U64 GeneratePosKey(const S_BOARD *pos)
 {
 

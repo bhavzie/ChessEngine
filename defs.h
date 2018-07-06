@@ -4,108 +4,109 @@
 #include<stdlib.h>
 
 //Error handler
-    #define DEBUG
-    #ifndef DEBUG
-    #define ASSERT(n)		// if N is false 
-    #else
-    #define ASSERT(n) \
-    if(!(n)) { \
-        printf("%s - Failed",#n); \
-        printf("On %s ", __DATE__); \
-        printf("At %s ",__TIME__); \
-        printf("In file %s ",__FILE__); \
-        printf("At Line %d\n",__LINE__); \
-        exit(1);}
-    #endif  
+	#define DEBUG
+	#ifndef DEBUG
+	#define ASSERT(n)		// if N is false 
+	#else
+	#define ASSERT(n) \
+	if(!(n)) { \
+		printf("%s - Failed",#n); \
+		printf("On %s ", __DATE__); \
+		printf("At %s ",__TIME__); \
+		printf("In file %s ",__FILE__); \
+		printf("At Line %d\n",__LINE__); \
+		exit(1);}
+	#endif  
 //
 
 
 //Definitions :
-    //Defining a 64 bit integer which is used on bitboards and many other places.
-    typedef unsigned long long U64;
-
-    #define NAME "Vice 1.0"
-    #define BRD_SQ_NUM 120                  // The square board is made 120 out of which 64 ( 8x8 ) are legal rest are filler
-    #define MAXGAMEMOVES 2048               // Max number of moves in a game
-    #define MAXPOSITIONMOVES 256		    // Max moves for a given position
-    
-   #define START_FEN  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-    
-    
-    
-    enum{EMPTY,wP,wN,wB,wR,wQ,wK,bP,bN,bB,bR,bQ,bK};   // [ 0 to 12 ]     
-    enum{FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H,FILE_NONE};
-    enum{RANK_1,RANK_2,RANK_3,RANK_4,RANK_5,RANK_6,RANK_7,RANK_8,RANK_NONE};
-    enum{WHITE,BLACK,BOTH};
-    enum{
-        A1=21,B1,C1,D1,E1,F1,G1,H1,
-        A2=31,B2,C2,D2,E2,F2,G2,H2,
-        A3=41,B3,C3,D3,E3,F3,G3,H3,
-        A4=51,B4,C4,D4,E4,F4,G4,H4,
-        A5=61,B5,C5,D5,E5,F5,G5,H5,
-        A6=71,B6,C6,D6,E6,F6,G6,H6,
-        A7=81,B7,C7,D7,E7,F7,G7,H7,
-        A8=91,B8,C8,D8,E8,F8,G8,H8,NO_SQ,OFFBOARD
-    };              // for the 8x8 board
-    enum{FALSE,TRUE};
-    enum{WKCA=1,WQCA=2,BKCA=4,BQCA=8};   // 0 0 0 0  ( each bit represents whether castle is possible ) If possible 1 else we change to 0
-
-   
-
-typedef struct {
-	int move;
-	int score;
-	   
-} S_MOVE;
-
-typedef struct {
-    
-	S_MOVE moves[MAXPOSITIONMOVES];
-	int count;	// Count of number of moves in the list
-	    
-} S_MOVELIST;
- 
-typedef struct {
-        int move;           // the move last played is stored as a 32 bit integer 
-        int castlePerm;
-        int enPas;
-        int fiftyMove;      
-        U64 posKey;            // using a hashkey which is a unique key for each sq on the board 
-        
 	
-} S_UNDO;           // Helps undo board by storing history of board before move is made
+	typedef unsigned long long U64;		//Defining a 64 bit integer which is used on bitboards and many other places
 
-    typedef struct {
-        
-            int pieces[BRD_SQ_NUM];     //Developing a 120 block array for chessboard
-            U64 pawns[3];               /* Pawns if present on a block set its value to 1 else set it to 0 - we choose 3 spaces since a pawn can be a white 
-                                        pawn or a black pawn or both : 00000000 00100000 
-                                                                        A1-H1    A2-H2 ( C2 is 1 so there is a pawn at C2)
-                                        Array of 3 since we keep one U64 for white one for black and one for both
-                                        */
-            int KingSq[2];              // Holding where king is
-            int side;                   // Who is moving
-            int enPas;                  //En Passant square
-            int fiftyMove;              //Check if 50 moves then draw
-            int ply;                    //Half Moves during searching a move ( so it's always 0 at the start of a search and you go on until you find the desired move and ++ply )
-            int hisPly;                 //Hisply stores total number of half moves made till now 
-            U64 posKey;                 //Check position which is a unique key for each position
-            int pceNum[13];             //Number of pieces on the board ( array of 13 since 13 types of pieces ( including empty )
-            int bigPce[2];              //Number of big pieces( which are not pawns) for each color
-            int majPce[2];              //Number of major pieces ( Rooks and queens ) for each color
-            int minPce[2];              //Number of  pieces which are bishops knights for each color
-            int material[2];		// value of material for black and white
-            int castlePerm;             //Explained in Enum {wkca ...}
-            
-		// Piece List
-            int pList[13][10];
-            /*types of pieces are 13 and max number of a piece can be 10 ( if we promote all pawns to rooks and have 2 rooks at the start )
-              so say pList[Wn][0]=E5 that is first white knight at e5 and so on
-            */
-            
-            S_UNDO history[MAXGAMEMOVES]; // Hold information of the board before a move is moved , we use 2048 since we wanto to hold history for all the moves rather than only the last move
+	#define NAME "Vice 1.0"
+	#define BRD_SQ_NUM 120                  // The square board is made 120 out of which 64 ( 8x8 ) are legal rest are filler
+	#define MAXGAMEMOVES 2048               // Max number of moves in a game
+	#define MAXPOSITIONMOVES 256		// Max moves for a given position
+	#define START_FEN  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	#define MAXDEPTH 64
+    
+    
+	enum{EMPTY,wP,wN,wB,wR,wQ,wK,bP,bN,bB,bR,bQ,bK};	// [ 0 to 12 ]     
+	enum{FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H,FILE_NONE};
+	enum{RANK_1,RANK_2,RANK_3,RANK_4,RANK_5,RANK_6,RANK_7,RANK_8,RANK_NONE};
+	enum{WHITE,BLACK,BOTH};
+	enum{
+		A1=21,B1,C1,D1,E1,F1,G1,H1,
+		A2=31,B2,C2,D2,E2,F2,G2,H2,
+		A3=41,B3,C3,D3,E3,F3,G3,H3,
+		A4=51,B4,C4,D4,E4,F4,G4,H4,
+		A5=61,B5,C5,D5,E5,F5,G5,H5,
+		A6=71,B6,C6,D6,E6,F6,G6,H6,
+		A7=81,B7,C7,D7,E7,F7,G7,H7,
+		A8=91,B8,C8,D8,E8,F8,G8,H8,NO_SQ,OFFBOARD
+	};							// for the 8x8 board
+	enum{FALSE,TRUE};
+	enum{WKCA=1,WQCA=2,BKCA=4,BQCA=8};   // 0 0 0 0  ( each bit represents whether castle is possible ) If possible 1 else we change to 0
 
-    } S_BOARD;
+	typedef struct {
+		int move;
+		int score;	   
+	} S_MOVE;
+
+	typedef struct {
+		S_MOVE moves[MAXPOSITIONMOVES];
+		int count;	// Count of number of moves in the list	    
+	} S_MOVELIST;
+	
+	typedef struct {	
+		U64 posKey;
+		int move;
+	} S_PVENTRY;	// Store the move that beat Alpha along with its posKey since it helps identifying the best move for future searches
+
+	typedef struct {
+		S_PVENTRY *pTable;
+		int numEntries;	
+	} S_PVTABLE;	// The HashTable for storing multiple PVEntries
+
+	typedef struct {
+		int move;		// the move last played is stored as a 32 bit integer 
+		int castlePerm;
+		int enPas;
+		int fiftyMove;      
+		U64 posKey;		// using a hashkey which is a unique key for each sq on the board 
+	} S_UNDO;			// Helps undo board by storing history of board before move is made
+
+	typedef struct {        
+		int pieces[BRD_SQ_NUM];		//Developing a 120 block array for chessboard
+		U64 pawns[3];			/* Pawns if present on a block set its value to 1 else set it to 0 - we choose 3 spaces since a pawn can be a white 
+						pawn or a black pawn or both : 00000000 00100000 
+						A1-H1    A2-H2 ( C2 is 1 so there is a pawn at C2)
+						Array of 3 since we keep one U64 for white one for black and one for both
+						*/
+		int KingSq[2];			// Holding where king is
+		int side;			// Who is moving
+		int enPas;			//En Passant square
+		int fiftyMove;			//Check if 50 moves then draw
+		int ply;                    //Half Moves during searching a move ( so it's always 0 at the start of a search and you go on until you find the desired move and ++ply )
+		int hisPly;                 //Hisply stores total number of half moves made till now 
+		U64 posKey;                 //Check position which is a unique key for each position
+		int pceNum[13];             //Number of pieces on the board ( array of 13 since 13 types of pieces ( including empty )
+		int bigPce[2];              //Number of big pieces( which are not pawns) for each color
+		int majPce[2];              //Number of major pieces ( Rooks and queens ) for each color
+		int minPce[2];              //Number of  pieces which are bishops knights for each color
+		int material[2];		// value of material for black and white
+		int castlePerm;             //Explained in Enum {wkca ...}
+		int pList[13][10];		// Piece List
+						/*types of pieces are 13 and max number of a piece can be 10 ( if we promote all pawns to rooks and have 2 rooks at the start )
+						so say pList[Wn][0]=E5 that is first white knight at e5 and so on
+						*/
+		S_UNDO history[MAXGAMEMOVES];	// Hold information of the board before a move is moved , we use 2048 since we wanto to hold history for all the moves rather than only the last move
+		S_PVTABLE PvTable[1];		// The hash table
+		int PvArray[MAXDEPTH];		// Stores the best line
+	} S_BOARD;
+	
+//
 
 /* MOVES 
  * Considering we have a 32 bit integer to store a move,we will assign first 7 bits for the FROM position , since the board can go from 21 to 98 and all these can be obtained by using 7 bits
@@ -213,7 +214,7 @@ typedef struct {
 	
 	// movegen.c
 	extern void GenerateAllMoves(const S_BOARD *pos,S_MOVELIST *list);
-	
+	extern int MoveExists(S_BOARD *pos,const int move);
 	// makemove.c
 	extern int MakeMove(S_BOARD *pos,int move);
 	extern void TakeMove(S_BOARD *pos);
@@ -223,5 +224,14 @@ typedef struct {
 	
 	// search.c	
 	extern void SearchPosition(S_BOARD *pos);
+	
+	// misc.c	
+	extern int GetTimeMs();
+	
+	// pvtable.c	
+	extern void InitPvTable(S_PVTABLE *table);
+	extern int ProbePvTable(const S_BOARD *pos);
+	extern void StorePvMove(const S_BOARD *pos,const int move);
+	extern int GetPvLine(const int depth,S_BOARD *pos);
 	
 #endif
