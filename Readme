@@ -59,7 +59,7 @@ Chess Enginge Programming :
                 Searching in a tree for all possible moves and then comparing it to some predefined values 
                 This is done to check if there are any bugs in our GenerateMove function
                  
-        ---------------------------------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
         3)  Search for the best move
                 Checking what is good and bad and how deep the search must be :
@@ -158,10 +158,16 @@ Chess Enginge Programming :
 		The most important thing while using Alpha-Beta is to have good move ordering,otherwise the worst nodes might always be called first and 
 		we might not achieve a lot of redundancy in the nodes traversed
 		Most effective way is to have the best node being visited first,so that worst one can always be skipped
-        ---------------------------------------------------------------------------------------------------------------------------------------------
+		However another serious problem with Alpha-Beta is,say we search till depth 5 and find a move say pawn kills knight as the best move in the depth 5
+		So the Alpha-beta will suggest to perform this particular move,but say at depth 6,the response to this move is pawn kills queen,then technically we 
+		are at a loss,but alpha-beta still suggested this move since it only searched till depth 5.This is called the horizon effect.
+		You cannot perform the search till depth INFINITY obviously,but you must tackle the horizon effect
+		This is where the Quiescence(evaluating quiet moves) effect helps.
+		
+        --------------------------------------------------------------------------------------------------------------------------------------------------------------
         
         4)  Evaluation
                 Evaluating  at each step whether the engine is losing or winning so as to make moves accordingly
 
             
--------X----------X------------X----------------X---------------X---------X------------X-----------X--------------X------------X--------------X-------X
+-------X----------X------------X----------------X---------------X---------X------------X-----------X--------------X------------X--------------X-------X-------X-------X-------X

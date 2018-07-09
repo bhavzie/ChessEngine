@@ -7,6 +7,7 @@
  * The main engine or the main file
  */
 
+#define WAC1 "2rr3k/pp3pp1/1nnqbN1p/3pN3/2pP4/2P3Q1/PPB4P/R4RK1 w - -"
 #define PERFTFEN "n1n5/PPPk4/8/8/8/8/4Kppp/5N1N w - - 0 1"
 
 int main()
@@ -16,10 +17,11 @@ int main()
 	
 	S_BOARD board[1];
 	S_MOVELIST list[1];
+	S_SEARCHINFO info[1];
 	int Max=0;
 	int PvNum=0;
 	
-	ParseFen(START_FEN,board);
+	ParseFen(WAC1,board);
 	
 	char input[6];	
 	int Move=NOMOVE;
@@ -38,16 +40,10 @@ int main()
 		{
 			TakeMove(board);
 		}
-		else if(input[0]=='p')
+		else if(input[0]=='s')
 		{
-			Max=GetPvLine(4,board);
-			printf("PvLine of %d Moves : ",Max);
-			for(PvNum=0;PvNum<Max;++PvNum)
-			{
-				Move=board->PvArray[PvNum];
-				printf(" %s ",PrMove(Move));
-			}
-			printf("\n");
+			info->depth=4;
+			SearchPosition(board,info);
 		}
 		else
 		{

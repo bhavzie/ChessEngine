@@ -103,9 +103,30 @@
 						*/
 		S_UNDO history[MAXGAMEMOVES];	// Hold information of the board before a move is moved , we use 2048 since we wanto to hold history for all the moves rather than only the last move
 		S_PVTABLE PvTable[1];		// The hash table
-		int PvArray[MAXDEPTH];		// Stores the best line
+		int PvArray[MAXDEPTH];		// Stores the best move line		
+		int searchHistory[13][BRD_SQ_NUM];	// Stores ALpha Beating move , helps in move ordering
+		int searchKillers[2][MAXDEPTH];		// Stores BetaCutoff moves , helps in move ordering	 	
 	} S_BOARD;
 	
+	typedef struct {
+		int starttime;		// Time the search is started 
+		int stoptime;
+		int depth;
+		int depthset;		// If a max_depth is specified
+		int timeset;		// If a time limit is specified for search	
+		int movestogo;
+		int infinite;		// If true search will never stop until GUI asks to stop
+		
+		long nodes;		// Count of nodes visited in search tree
+		
+		int quit;		// If interrupted by GUI,quit set to true and cleanup started
+		int stopped;		// If program stops without quit being called by GUI
+		
+		// helps in move ordering,try to get ratio greater than 90%
+		float fh;	// fail high - number of times we get > beta on first move
+		float fhf;	// fail high first - total > beta counts 
+		
+	} S_SEARCHINFO;
 //
 
 /* MOVES 
@@ -223,7 +244,7 @@
 	extern void PerftTest(int depth, S_BOARD *pos);
 	
 	// search.c	
-	extern void SearchPosition(S_BOARD *pos);
+	extern void SearchPosition(S_BOARD *pos,S_SEARCHINFO *info);
 	
 	// misc.c	
 	extern int GetTimeMs();
@@ -233,5 +254,9 @@
 	extern int ProbePvTable(const S_BOARD *pos);
 	extern void StorePvMove(const S_BOARD *pos,const int move);
 	extern int GetPvLine(const int depth,S_BOARD *pos);
+	extern void ClearPvTable(S_PVTABLE *table);
+	
+	// evaluate.c
+	extern int EvalPosition(const S_BOARD *pos);
 	
 #endif
