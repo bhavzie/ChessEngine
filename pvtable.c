@@ -8,7 +8,7 @@
 
 const int PvSize=0x100000*2;	// 2 megabytes
 
-int GetPvLine(const int depth,S_BOARD *pos)
+int GetPvLine(const int depth,S_BOARD *pos)		// Stores in the PVArray and returns count of moves
 {
 	ASSERT(depth<MAXDEPTH);
 	
@@ -57,12 +57,11 @@ void InitPvTable(S_PVTABLE *table)
 	
 	if((table->pTable)!=NULL)
 	{
-		//free(table->pTable);
+		free(table->pTable);
 	}
-	
 	table->pTable=(S_PVENTRY*)malloc(table->numEntries*sizeof(S_PVENTRY));
 	ClearPvTable(table);
-	printf("PvTable init complete with %d entries\n",table->numEntries);	
+	printf("PvTable init complete with %d entries\n",table->numEntries);
 	
 }
 
