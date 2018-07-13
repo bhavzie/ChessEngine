@@ -4,7 +4,7 @@
 #include<stdlib.h>
 
 //Error handler
-	#define DEBUG
+//	#define DEBUG
 	#ifndef DEBUG
 	#define ASSERT(n)		// if N is false 
 	#else
@@ -123,8 +123,8 @@
 		int stopped;		// If program stops without quit being called by GUI
 		
 		// helps in move ordering,try to get ratio greater than 90%
-		float fh;	// fail high - number of times we get > beta on first move
-		float fhf;	// fail high first - total > beta counts 
+		float fhf;	// fail high - number of times we get > beta on first move
+		float fh;	// fail high first - total > beta counts 
 		
 	} S_SEARCHINFO;
 //
@@ -236,6 +236,9 @@
 	// movegen.c
 	extern void GenerateAllMoves(const S_BOARD *pos,S_MOVELIST *list);
 	extern int MoveExists(S_BOARD *pos,const int move);
+	extern int InitMvvLva();
+	extern void GenerateAllCaps(const S_BOARD *pos,S_MOVELIST *list);
+	
 	// makemove.c
 	extern int MakeMove(S_BOARD *pos,int move);
 	extern void TakeMove(S_BOARD *pos);
