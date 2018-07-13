@@ -163,6 +163,9 @@ Chess Enginge Programming :
 		are at a loss,but alpha-beta still suggested this move since it only searched till depth 5.This is called the horizon effect.
 		You cannot perform the search till depth INFINITY obviously,but you must tackle the horizon effect
 		This is where the Quiescence(evaluating quiet moves) effect helps.
+		When alpha-beta runs out of depth, rather than calling "Evaluate()", a quiescent search function is called instead.  This function evaluates 
+		the position, while being careful to avoid overlooking extremely obvious tactical conditions.
+		
 		
         --------------------------------------------------------------------------------------------------------------------------------------------------------------
         

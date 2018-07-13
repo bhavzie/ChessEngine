@@ -77,7 +77,8 @@ void StorePvMove(const S_BOARD *pos,const int move)	// Store a move in the PV ta
 
 int ProbePvTable(const S_BOARD *pos)	// Retrieve the move
 {
-	int index=pos->posKey%pos->PvTable->numEntries;		
+	int index=pos->posKey%pos->PvTable->numEntries;	
+	
 	ASSERT(index>=0&&index<=pos->PvTable->numEntries-1);
 	
 	if(pos->PvTable->pTable[index].posKey==pos->posKey)
