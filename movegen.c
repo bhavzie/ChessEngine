@@ -9,11 +9,16 @@
 #define MOVE(f,t,ca,pro,fl) ( (f) | ((t) << 7) | ( (ca) << 14 ) | ( (pro) << 20 ) | (fl))
 #define SQOFFBOARD(sq) (FilesBrd[(sq)]==OFFBOARD)
 
-const int LoopSlidePce[8]={wB,wR,wQ,0,bB,bR,bQ,0};
-const int LoopSlideIndex[2]={0,4};
+const int LoopSlidePce[8] = {
+ wB, wR, wQ, 0, bB, bR, bQ, 0
+};
 
-const int LoopNonSlidePce[6]={wN,wK,0,bN,bK,0};
-const int LoopNonSlideIndex[2]={0,3};
+const int LoopNonSlidePce[6] = {
+ wN, wK, 0, bN, bK, 0
+};
+
+const int LoopSlideIndex[2] = { 0, 4 };
+const int LoopNonSlideIndex[2] = { 0, 3 };
 
 const int PceDir[13][8] = {
 	{ 0, 0, 0, 0, 0, 0, 0 },
@@ -68,8 +73,9 @@ const int NumDir[13] = {
  * say PXQ we get 505 , NXQ = 504 .. 
  */
 
-const int VictimScore[13]={0,100,200,300,400,500,600,100,200,300,400,500,600};
+const int VictimScore[13] = { 0, 100, 200, 300, 400, 500, 600, 100, 200, 300, 400, 500, 600 };
 static int MvvLvaScores[13][13];
+
 
 int InitMvvLva()
 {
