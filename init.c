@@ -91,7 +91,8 @@ void InitBitMasks()
 }
 
 
-void InitSq120To64() {
+void InitSq120To64()
+{
 int index=0;
 int file=FILE_A;
 int rank=RANK_1;

@@ -251,6 +251,7 @@
 	
 	// misc.c	
 	extern int GetTimeMs();
+	extern void ReadInput(S_SEARCHINFO *info);
 	
 	// pvtable.c	
 	extern void InitPvTable(S_PVTABLE *table);
@@ -261,5 +262,9 @@
 	
 	// evaluate.c
 	extern int EvalPosition(const S_BOARD *pos);
+	
+	// uci.c
+	extern void Uci_Loop();
+	
 	
 #endif

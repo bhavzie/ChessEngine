@@ -171,6 +171,12 @@ Chess Enginge Programming :
         
         4)  Evaluation
                 Evaluating  at each step whether the engine is losing or winning so as to make moves accordingly
-
+		This is achieved by assigning a score to each position
+		
+	--------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        5)  Connect to GUI 
+		There are certain rules(protocols) to be followed when connecting to a GUI 
+		We use the UCI protocol for connecting to the GUI
             
 -------X----------X------------X----------------X---------------X---------X------------X-----------X--------------X------------X--------------X-------X-------X-------X-------X
