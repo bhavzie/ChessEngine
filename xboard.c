@@ -1,3 +1,8 @@
+/*
+ * Most of this code is copy pasted from the WinBoard forums & using BlueFeverSoftware's xboard video
+/
+
+
 #include<stdio.h>
 #include"defs.h"
 #include<string.h>
