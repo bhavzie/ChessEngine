@@ -48,7 +48,9 @@
 	};							// for the 8x8 board
 	enum{FALSE,TRUE};
 	enum{WKCA=1,WQCA=2,BKCA=4,BQCA=8};   // 0 0 0 0  ( each bit represents whether castle is possible ) If possible 1 else we change to 0
-
+	enum{UCIMODE,XBOARDMODE,CONSOLEMODE};
+	
+	
 	typedef struct {
 		int move;
 		int score;	   
@@ -125,6 +127,10 @@
 		// helps in move ordering,try to get ratio greater than 90%
 		float fhf;	// fail high - number of times we get > beta on first move
 		float fh;	// fail high first - total > beta counts 
+		
+		
+		int GAME_MODE;
+		int POST_THINKING;
 		
 	} S_SEARCHINFO;
 //
@@ -264,7 +270,11 @@
 	extern int EvalPosition(const S_BOARD *pos);
 	
 	// uci.c
-	extern void Uci_Loop();
+	extern void Uci_Loop(S_BOARD *pos, S_SEARCHINFO *info);
+	
+	// xboard.c
+	extern void XBoard_Loop(S_BOARD *pos, S_SEARCHINFO *info);
+	extern void Console_Loop(S_BOARD *pos, S_SEARCHINFO *info);
 	
 	
 #endif

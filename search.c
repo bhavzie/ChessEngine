@@ -221,7 +221,7 @@ static int AlphaBeta(int alpha,int beta,int depth,S_BOARD *pos,S_SEARCHINFO *inf
 	
 	info->nodes++;
 	
-	if(IsRepetition(pos)||pos->fiftyMove>=100)	// draw
+	if((IsRepetition(pos) || pos->fiftyMove>=100) && pos->ply)	// draw
 	{
 		return 0;
 	}
@@ -346,20 +346,48 @@ void SearchPosition(S_BOARD *pos,S_SEARCHINFO *info)	// Iterative Deepening , se
 		pvMoves=GetPvLine(currentDepth,pos);
 		bestMove=pos->PvArray[0];
 		
-		printf("info score cp %d depth %d nodes %ld time %d ",bestScore,currentDepth,info->nodes,GetTimeMs()-info->starttime);
-		
-		// Printing the entire PVarray
-		pvMoves=GetPvLine(currentDepth,pos);
-		printf("pv");
-		for(pvNum=0;pvNum<pvMoves;++pvNum)
+		if(info->GAME_MODE == UCIMODE)
 		{
-			printf(" %s",PrMove(pos->PvArray[pvNum]));
+			printf("info score cp %d depth %d nodes %ld time %d ",
+				bestScore,currentDepth,info->nodes,GetTimeMs()-info->starttime);
 		}
-		printf("\n");
-	//	printf("Ordering:%.2f\n",(info->fhf/info->fh));
+		else if(info->GAME_MODE == XBOARDMODE && info->POST_THINKING == TRUE)
+		{
+			printf("%d %d %d %ld ",
+				currentDepth,bestScore,(GetTimeMs()-info->starttime)/10,info->nodes);
+		}
+		else if(info->POST_THINKING == TRUE)
+		{
+			printf("score:%d depth:%d nodes:%ld time:%d(ms) ",
+				bestScore,currentDepth,info->nodes,GetTimeMs()-info->starttime);
+		}
+		if(info->GAME_MODE == UCIMODE || info->POST_THINKING == TRUE)
+		{
+			pvMoves = GetPvLine(currentDepth, pos);	
+			printf("pv");		
+			for(pvNum = 0; pvNum < pvMoves; ++pvNum)
+			{
+				printf(" %s",PrMove(pos->PvArray[pvNum]));
+			}
+			printf("\n");
+		}
 	}
 	
-	printf("bestmove %s\n",PrMove(bestMove));
+	if(info->GAME_MODE == UCIMODE)
+	{
+		printf("bestmove %s\n",PrMove(bestMove));
+	}
+	else if(info->GAME_MODE == XBOARDMODE)
+	{		
+		printf("move %s\n",PrMove(bestMove));
+		MakeMove(pos, bestMove);
+	}
+	else
+	{	
+		printf("\n\n***!! Vice makes move %s !!***\n\n",PrMove(bestMove));
+		MakeMove(pos, bestMove);
+		PrintBoard(pos);
+	}
 	
 	
 }

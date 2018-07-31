@@ -8,7 +8,8 @@
 
 
 // go depth 6 wtime 180000 btime 100000 binc 1000 winc 1000 movetime 1000 movestogo 40
-void ParseGo(char* line, S_SEARCHINFO *info, S_BOARD *pos) {
+void ParseGo(char* line, S_SEARCHINFO *info, S_BOARD *pos)
+{
     
 	int depth = -1, movestogo = 30,movetime = -1;
 	int time = -1, inc = 0;
@@ -136,7 +137,7 @@ void ParsePosition(char *lineIn,S_BOARD *pos)
 }
 
 
-void Uci_Loop()
+void Uci_Loop(S_BOARD *pos, S_SEARCHINFO *info)
 {
 	// setting the buffer off so as to not mess with gui I/O
 	setbuf(stdin,NULL);
@@ -148,9 +149,6 @@ void Uci_Loop()
 	printf("id author Bhavzi\n");
 	printf("uciok\n");
 	
-	S_BOARD pos[1];
-	S_SEARCHINFO info[1];
-	InitPvTable(pos->PvTable);
 	
 	while(TRUE)
 	{
@@ -202,7 +200,6 @@ void Uci_Loop()
 		
 	}
 	
-	free(pos->PvTable->pTable);	
 	
 }
 

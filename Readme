@@ -178,5 +178,22 @@ Chess Enginge Programming :
         5)  Connect to GUI 
 		There are certain rules(protocols) to be followed when connecting to a GUI 
 		We use the UCI protocol for connecting to the GUI
-            
+		UCI protocol : 	
+			position [startpos] [fen] moves e2e4 e7e5 ....
+			go wtime btime winc binc ... 
+		Problem with this protocol is that it is stateless meaning the GUI is given a string with the position command and it searches for a move and
+		returns the best possible move.
+		Cant play a game with the engine on console for UCI protocol since it only handles searching of best moves and doesn't actually handle the making of moves
+		
+		XBoard Protocol(WinBoard / ChessEngine  Communication Protocol) : 
+			new command : new game 
+			sd 8 : depth 8
+			level : 
+			usermove e2e4 : opponent moves e2e4 and then you search for your move 
+			
+		
+		
+		
+		
+		
 -------X----------X------------X----------------X---------------X---------X------------X-----------X--------------X------------X--------------X-------X-------X-------X-------X
